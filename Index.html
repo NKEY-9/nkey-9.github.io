@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gyeong-min Gu | Design Engineer Portfolio</title>
+    <!-- 폰트 및 아이콘 로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- 기본 설정 및 변수 (올 화이트 & 민트 테마) --- */
+        :root {
+            --bg-main: #ffffff;
+            --bg-secondary: #ffffff;  /* 섹션 배경을 다시 흰색으로 변경 */
+            --text-main: #2d3436;     /* 진한 차콜색 */
+            --text-sub: #636e72;      /* 중간 회색 */
+            --accent-mint: #00b894;   /* 메인 민트 컬러 */
+            --accent-dark: #00896f;   /* 어두운 민트 (호버용) */
+            --accent-gradient: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+            --card-bg: #f9f9f9;       /* 카드의 배경색을 연한 회색으로 설정 */
+            --card-shadow: 0 10px 30px rgba(0, 184, 148, 0.15); /* 민트빛 그림자 */
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- 모던 테크니컬 그리드 (밝은 버전) --- */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- 레이아웃 유틸리티 --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        /* --- 헤더 (Hero Section) --- */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: transparent; /* 배경 그라데이션 제거 (흰색 유지) */
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            animation: fadeInDown 1s forwards 0.5s;
+        }
+
+        .job-title {
+            font-size: 1.5rem;
+            color: var(--text-sub);
+            margin-bottom: 15px; 
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.8s;
+            position: relative;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .job-title::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px; 
+            left: 50%;
+            background: var(--accent-mint);
+            transition: width 0.5s ease, left 0.5s ease;
+            animation: expandLine 1s forwards 1.2s;
+        }
+
+        /* --- 헤더 아이콘 스타일 추가 --- */
+        .header-icons {
+            margin-top: 20px;    
+            margin-bottom: 30px; 
+            display: flex;
+            justify-content: center; 
+            gap: 30px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards 1.5s; 
+        }
+
+        .header-icons i {
+            font-size: 2rem;
+            color: var(--accent-mint);
+            opacity: 0.6; 
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .header-icons i:hover {
+            transform: translateY(-5px) scale(1.1);
+            opacity: 1;
+            color: var(--accent-dark);
+        }
+
+        @keyframes expandLine {
+            to { width: 100%; left: 0; }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            color: var(--accent-mint);
+        }
+
+        /* --- About Section --- */
+        #about {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            border-left: 5px solid var(--accent-mint);
+            padding-left: 20px;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            text-align: center;
+            color: var(--text-sub);
+        }
+
+        /* --- Research Box Style (New) --- */
+        .research-box {
+            margin-top: 40px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--accent-mint); /* 왼쪽 강조 선 */
+            border-radius: 8px;
+            padding: 30px;
+            text-align: left;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease;
+        }
+
+        .research-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 184, 148, 0.1);
+        }
+        
+        .research-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .research-item {
+            margin-bottom: 25px; /* 간격 약간 증가 */
+            /* 기존 Flex 레이아웃 제거 -> 블록 형태로 변경하여 텍스트가 아래로 오게 함 */
+            display: block; 
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .research-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 아이콘 스타일 수정: 제목 옆으로 배치되도록 조정 */
+        .research-item i {
+            color: var(--accent-mint);
+            font-size: 1.1rem;
+            margin-right: 8px; /* 제목과의 간격 */
+        }
+
+        .research-item strong {
+            color: var(--text-main);
+            /* display: block; 제거 -> 아이콘과 한 줄에 표시 */
+            font-size: 1.05rem;
+            margin-bottom: 5px;
+        }
+        
+        .research-desc {
+            display: block;
+            margin-top: 5px;
+            padding-left: 0; /* 필요시 들여쓰기 조정 */
+            color: var(--text-sub);
+        }
+
+        /* --- Project Section --- */
+        #projects {
+            background: var(--bg-secondary); /* 이제 흰색입니다 */
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: var(--card-bg); /* 연한 회색 배경 적용 */
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--card-shadow);
+            border-color: var(--accent-mint);
+            background: #ffffff; /* 호버 시에는 밝은 흰색으로 강조 */
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--card-shadow);
+            border-color: var(--accent-mint);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 184, 148, 0.05), transparent);
+            transition: 0.5s;
+            pointer-events: none;
+        }
+
+        .project-card:hover::before {
+            left: 100%;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .project-desc {
+            font-size: 1rem;
+            color: var(--text-sub);
+            margin-bottom: 20px;
+        }
+
+        /* --- Future Projects Section (New) --- */
+        #future-projects {
+            background: #fff; /* 흰색 배경 */
+        }
+
+        .future-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            height: 100%;
+        }
+
+        .future-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-mint);
+            box-shadow: var(--card-shadow);
+        }
+
+        .future-icon {
+            font-size: 2.5rem;
+            color: var(--accent-mint);
+            margin-bottom: 20px;
+        }
+
+        .future-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .future-desc {
+            font-size: 1rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+        }
+
+        /* --- Skills Section --- */
+        #skills {
+            text-align: center;
+            background: var(--bg-secondary); /* 이제 흰색입니다 */
+        }
+
+        .skills-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 60px; /* 섹션 간 간격 */
+        }
+
+        .skill-category {
+            text-align: center;
+        }
+
+        .skill-category h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 40px;
+            display: inline-block;
+            border-bottom: 2px solid var(--accent-mint);
+            padding-bottom: 5px;
+        }
+
+        .skill-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .skill-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.3s;
+            background: var(--card-bg); /* 연한 회색 배경 적용 */
+            padding: 30px 20px;
+            border-radius: 12px;
+            width: 300px; /* 너비 고정 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid transparent;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-mint);
+            box-shadow: var(--card-shadow);
+            background: #ffffff; /* 호버 시 밝은 흰색으로 강조 */
+        }
+
+        .skill-icon-box {
+            width: 70px;
+            height: 70px;
+            border: 2px solid var(--accent-mint);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            background: #fff;
+            color: var(--accent-mint);
+            position: relative;
+            margin-bottom: 5px;
+            transition: 0.3s;
+        }
+        
+        .skill-item:hover .skill-icon-box {
+            background: var(--accent-mint);
+            color: #fff;
+        }
+
+        .skill-item:hover .skill-icon-box i {
+            animation: spin 4s linear infinite;
+        }
+
+        .skill-name {
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-main);
+            font-size: 1.1rem;
+        }
+
+        .skill-desc {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: #f1f2f6; /* 배경: 연한 회색으로 변경 */
+            color: var(--text-sub); /* 텍스트: 어두운 회색으로 변경 (가독성 확보) */
+            text-align: center;
+            padding: 50px 20px;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color); /* 상단 경계선 추가 */
+        }
+
+        .footer-message {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: var(--text-main); /* 강조 텍스트: 진한 차콜색 */
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .social-links a {
+            color: var(--text-sub); /* 아이콘 색상: 회색 */
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ffffff; /* 아이콘 배경: 흰색 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* 부드러운 그림자 */
+        }
+
+        .social-links a:hover {
+            color: #fff;
+            background: var(--accent-mint);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.3);
+        }
+
+        .copyright {
+            opacity: 0.8;
+            font-size: 0.8rem;
+        }
+
+        /* --- Animations --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+        @keyframes spin {
+            100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .section-title { font-size: 2rem; }
+            .skill-container { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 배경 격자 무늬 -->
+    <div class="grid-bg"></div>
+
+    <!-- 헤더 -->
+    <header>
+        <div class="container">
+            <h1>Gyeong-min Gu</h1>
+            <div class="job-title">Design Engineer | Defense Industry</div>
+
+            <!-- 아이콘 영역 (순서 변경: 전투기, 제도기, 전차, 기어, 전투함) -->
+            <div class="header-icons">
+                <!-- 1. 전투기 -->
+                <i class="fas fa-jet-fighter" title="Air Defense"></i>
+                
+                <!-- 2. 제도기 (Compass) -->
+                <i class="fas fa-compass-drafting" title="Design & Drafting"></i>
+                
+                <!-- 3. 전차 (Ground Vehicle) -->
+                <i class="fas fa-truck-monster" title="Ground Combat Vehicle"></i>
+                
+                <!-- 4. 기어 (Engineering) -->
+                <i class="fas fa-cogs" title="Mechanism Design"></i>
+                
+                <!-- 5. 전투함 (Warship) -->
+                <i class="fas fa-ship" title="Naval Defense"></i>
+            </div>
+
+            <p style="margin-top: 0; color: var(--text-sub); max-width: 600px; margin-left: auto; margin-right: auto; font-weight: 500;">
+                "나 혼자 성장하면 성공하지 못 한다."<br>
+                "언제나 모든 일에 최선을 다한다."
+            </p>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </header>
+
+    <!-- About 섹션 -->
+    <section id="about">
+        <div class="container reveal">
+            <!-- 제도기 아이콘을 제목 옆으로 이동 -->
+            <h2 class="section-title">
+                About Me 
+                <i class="fas fa-drafting-compass" style="margin-left: 15px; color: var(--accent-mint);"></i>
+            </h2>
+            
+            <div class="about-content">
+                <p>
+                    반갑습니다. 방산 분야에서 더 안전하고 효율적인 시스템을 설계하는 엔지니어 구경민입니다. 
+                    기계 공학적 지식과 CAD 설계를 바탕으로 실전에서 작동하는 견고한 솔루션을 만듭니다.
+                    동료와의 협업을 통해 함께 성장하며, 맡은 프로젝트에는 언제나 최선을 다해 임하고 있습니다.
+                </p>
+
+                <!-- 추가된 연구 경력 박스 -->
+                <div class="research-box">
+                    <div class="research-header">
+                        <i class="fas fa-microscope"></i> Research Experience
+                    </div>
+                    
+                    <!-- 아이콘을 제목 옆으로 이동시킨 구조 -->
+                    <div class="research-item">
+                        <strong>
+                            <i class="fas fa-award"></i> Academic Conference Awards
+                        </strong>
+                        <span class="research-desc">
+                            학부 연구생으로서 <b>대한기계학회(KSME)</b>와 <b>한국기계가공학회(KSMTE)</b> 학술대회에 참가하여, 연구 성과에 대한 포스터 발표를 진행하였으며 그 우수성을 인정받아 수상하였습니다.
+                        </span>
+                    </div>
+
+                    <div class="research-item">
+                        <strong>
+                            <i class="fas fa-flask"></i> Current Research Focus
+                        </strong>
+                        <span class="research-desc">
+                            현재는 <b>3D 프린팅</b> 공정 최적화 및 <b>소프트 액추에이터(Soft Actuator)</b>의 유연한 구동 메커니즘에 관련된 심화 연구를 주도적으로 진행하고 있습니다.
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 하단에 있던 큰 아이콘 div 제거됨 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Project 섹션 -->
+    <section id="projects">
+        <div class="container reveal">
+            <h2 class="section-title">Projects</h2>
+            <div class="project-grid">
+                
+                <!-- Project 1: Machine Tool Design -->
+                <div class="project-card">
+                    <div>
+                        <h3 class="project-title">Machine Tool Design</h3>
+                        <p class="project-desc">Inventor를 활용하여 정밀 공작 기계의 본체 및 구동 메커니즘을 설계했습니다. 구조적 안정성을 확보하고 작업 효율을 높이는 데 중점을 두었습니다.</p>
+                        <div class="tech-tags">
+                            <span class="tag">Inventor</span>
+                            <span class="tag">Mechanical Design</span>
+                            <span class="tag">3D Modeling</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn-github"><i class="fab fa-github"></i> View Details</a>
+                </div>
+
+                <!-- Project 2: Smart CCTV Housing -->
+                <div class="project-card">
+                    <div>
+                        <h3 class="project-title">Anti-Spider Web CCTV System</h3>
+                        <p class="project-desc">CCTV 하우징에 진동 모터 제어 시스템을 탑재하여 렌즈 앞 거미줄 생성을 방지했습니다. 센서 데이터 기반으로 모터를 작동시켜 시야 확보를 자동화했습니다.</p>
+                        <div class="tech-tags">
+                            <span class="tag">Vibration Control</span>
+                            <span class="tag">Mechanism Design</span>
+                            <span class="tag">Automation</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn-github"><i class="fab fa-github"></i> View Details</a>
+                </div>
+
+                <!-- Project 3: 3D Printing Research -->
+                <div class="project-card">
+                    <div>
+                        <h3 class="project-title">3D Printing Shrinkage Analysis</h3>
+                        <p class="project-desc">다양한 필라멘트 재질과 출력 환경에 따른 수축률 데이터를 수집하고 분석했습니다. 이를 통해 정밀 부품 출력 시의 오차 범위를 획기적으로 줄이는 연구를 수행했습니다.</p>
+                        <div class="tech-tags">
+                            <span class="tag">Data Analysis</span>
+                            <span class="tag">3D Printing</span>
+                            <span class="tag">R&D</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn-github"><i class="fab fa-github"></i> View Details</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Projects Section (New) -->
+    <section id="future-projects">
+        <div class="container reveal">
+            <h2 class="section-title">Future Projects</h2>
+            <div class="project-grid">
+                
+                <!-- 1. Defense Journal -->
+                <div class="future-card">
+                    <div class="future-icon">
+                        <i class="fas fa-book-journal-whills"></i>
+                    </div>
+                    <h3 class="future-title">Defense Journal Publication</h3>
+                    <p class="future-desc">
+                        Planning to publish a technical paper on advanced tracked vehicle suspension systems in a prestigious defense industry journal.
+                    </p>
+                </div>
+
+                <!-- 2. Machine Tool Collaboration -->
+                <div class="future-card">
+                    <div class="future-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h3 class="future-title">Machine Tool Collaboration</h3>
+                    <p class="future-desc">
+                        Conducting joint research with a leading machine tool manufacturer to optimize structural rigidity using vibration analysis.
+                    </p>
+                </div>
+
+                <!-- 3. Soft Actuator R&D -->
+                <div class="future-card">
+                    <div class="future-icon">
+                        <!-- 아이콘 변경: fa-dna -> fa-hand-holding (Soft Grip) -->
+                        <i class="fas fa-hand-holding"></i>
+                    </div>
+                    <h3 class="future-title">Soft Actuator R&D</h3>
+                    <p class="future-desc">
+                        Developing bio-mimetic soft actuators for adaptive gripping mechanisms in unpredictable combat environments.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills 섹션 (Design & Coding 분리) -->
+    <section id="skills">
+        <div class="container reveal">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-wrapper">
+                
+                <!-- Section 1: Design -->
+                <div class="skill-category">
+                    <h3>Design Tools</h3>
+                    <div class="skill-container">
+                        <div class="skill-item">
+                            <div class="skill-icon-box">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <span class="skill-name">Inventor</span>
+                            <p class="skill-desc">
+                            </p>
+                                Proficient in parametric 3D modeling and creating detailed mechanical drawings for manufacturing.
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon-box">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <span class="skill-name">AutoCAD</span>
+                            <p class="skill-desc">
+                                Skilled in 2D drafting, layout design, and creating accurate technical schematics for production.
+                            </p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon-box">
+                                <i class="fas fa-cube"></i>
+                            </div>
+                            <span class="skill-name">CATIA</span>
+                            <p class="skill-desc">
+                                Experienced in complex surface modeling and large-scale assembly design for defense systems.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Coding -->
+                <div class="skill-category">
+                    <h3>Coding</h3>
+                    <div class="skill-container">
+                        <div class="skill-item">
+                            <div class="skill-icon-box">
+                                <i class="fab fa-python"></i>
+                            </div>
+                            <span class="skill-name">Python</span>
+                            <p class="skill-desc">
+                                Utilizing libraries like NumPy and Pandas for engineering data analysis and process automation.
+                            </p>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon-box">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <span class="skill-name">C Language</span>
+                            <p class="skill-desc">
+                                Programming embedded systems and optimizing control logic for hardware interfaces and sensors.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer>
+        <div class="container">
+            <p class="footer-message">프로젝트, 연구 문의 언제나 환영합니다</p>
+            
+            <div class="social-links">
+                <!-- 이메일 -->
+                <a href="mailto:qpalzmqpal70@gmail.com" title="Send Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <!-- GitHub (링크를 실제 주소로 변경하세요) -->
+                <a href="#" target="_blank" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <!-- LinkedIn (링크를 실제 주소로 변경하세요) -->
+                <a href="#" target="_blank" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+
+            <p class="copyright">&copy; 2024 Gyeong-min Gu. All Rights Reserved. | Designed by Coding Partner</p>
+        </div>
+    </footer>
+
+    <!-- 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                const elementVisible = 150;
+                reveals.forEach((reveal) => {
+                    const elementTop = reveal.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveal.classList.add('active');
+                    } else {
+                        reveal.classList.remove('active');
+                    }
+                });
+            };
+            revealOnScroll();
+            window.addEventListener('scroll', revealOnScroll);
+        });
+    </script>
+</body>
+</html>
